@@ -148,8 +148,15 @@ if st.button("CALCULAR", type="primary"):
         current_price = get_current_price(tk)
         chain = tk.option_chain(expiration_input)
 
-        calls = [calc_score(row, current_price) for _, row in chain.calls.iterrows()]
-        puts = [calc_score(row, current_price) for _, row in chain.puts.iterrows()]
+        calls_raw = chain.calls.copy()
+        puts_raw = chain.puts.copy()
+
+        # filtrar contratos muertos
+        calls_raw = calls_raw[(calls_raw["bid"] > 0) & (calls_raw["ask"] > 0)]
+        puts_raw = puts_raw[(puts_raw["bid"] > 0) & (puts_raw["ask"] > 0)]
+
+        calls = [calc_score(row, current_price) for _, row in calls_raw.iterrows()]
+        puts = [calc_score(row, current_price) for _, row in puts_raw.iterrows()]
 
         calls_df = pd.DataFrame(calls).sort_values(
             by=["Score", "Vol", "OI"], ascending=[False, False, False]

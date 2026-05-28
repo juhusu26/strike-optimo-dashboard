@@ -166,14 +166,14 @@ if st.button("CALCULAR", type="primary"):
 
         st.subheader("Top CALLS")
         st.dataframe(
-            calls_df.style.applymap(score_style, subset=["Score"]),
+            calls_df,
             use_container_width=True,
             hide_index=True
         )
 
         st.subheader("Top PUTS")
         st.dataframe(
-            puts_df.style.applymap(score_style, subset=["Score"]),
+            puts_df,
             use_container_width=True,
             hide_index=True
         )
